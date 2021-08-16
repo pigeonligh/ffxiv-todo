@@ -18,8 +18,8 @@ const (
 func GetAPI(key types.CacheKey) string {
 	switch key.Action {
 	case types.ActionSearch:
-		return fmt.Sprintf("%s?indexes=Item&string=%s&page=%d",
-			SearchAPI, key.Value, key.Page)
+		return fmt.Sprintf("%s?indexes=%s&string=%s&page=%d",
+			SearchAPI, key.TransAction, key.Value, key.Page)
 
 	case types.ActionItem:
 		return fmt.Sprintf("%s/%d", ItemAPI, key.Index)

@@ -8,6 +8,7 @@ import (
 
 	"github.com/pigeonligh/easygo/elog"
 	"github.com/pigeonligh/ffxiv-todo/pkg/types"
+	"github.com/pigeonligh/ffxiv-todo/pkg/utils"
 )
 
 type WIKI struct {
@@ -35,7 +36,7 @@ func (w *WIKI) get(key types.CacheKey) (interface{}, bool) {
 	}
 
 	if response.StatusCode != http.StatusOK {
-		elog.Warningf("Error doing request for %s: status code is %s",
+		elog.Warningf("Error doing request for %s: status code is %d",
 			api, response.StatusCode)
 		return nil, false
 	}
@@ -52,16 +53,17 @@ func (w *WIKI) get(key types.CacheKey) (interface{}, bool) {
 	}
 
 	var result interface{} = nil
-	err = nil
 
 	switch action {
 	case types.ActionSearch:
+		fmt.Println(utils.FormatJSON(data))
 		searchBody := types.SearchBody{}
 		err = json.Unmarshal(data, &searchBody)
 		if err == nil {
 			result = types.Wrap(searchBody)
 		}
 	case types.ActionItem:
+		fmt.Println(utils.FormatJSON(data))
 		itemBody := types.ItemBody{}
 		err = json.Unmarshal(data, &itemBody)
 		if err == nil {
@@ -100,11 +102,12 @@ func (w *WIKI) Get(key types.CacheKey) (interface{}, bool) {
 	return result, true
 }
 
-func (w *WIKI) Search(name string, page int) (types.SearchResult, bool) {
+func (w *WIKI) Search(index, name string, page int) (types.SearchResult, bool) {
 	result, found := w.Get(types.CacheKey{
-		Action: types.ActionSearch,
-		Value:  name,
-		Page:   page,
+		Action:      types.ActionSearch,
+		TransAction: index,
+		Value:       name,
+		Page:        page,
 	})
 	if found {
 		return result.(types.SearchResult), true
@@ -113,13 +116,13 @@ func (w *WIKI) Search(name string, page int) (types.SearchResult, bool) {
 }
 
 func (w *WIKI) GetItem(name string) (types.Item, bool) {
-	result, found := w.Search(name, 1)
+	result, found := w.Search(types.ActionItem, name, 1)
 	if !found {
 		return types.Item{}, false
 	}
 	pages := result.Pagination.PageTotal
 	for i := 1; i <= pages; i++ {
-		result, found := w.Search(name, i)
+		result, found := w.Search(types.ActionItem, name, i)
 		if !found {
 			continue
 		}

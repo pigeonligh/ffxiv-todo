@@ -40,7 +40,11 @@ type ItemRecipe struct {
 
 type ItemBody struct {
 	SearchItem
+	LevelItem   int          `json:"LevelItem"`
 	CanBeHq     int          `json:"CanBeHq"`
+	Rarity      int          `json:"Rarity"`
+	PriceSell   int          `json:"PriceLow"`
+	PriceBuy    int          `json:"PriceMid"`
 	Description string       `json:"Description"`
 	Recipes     []ItemRecipe `json:"Recipes"`
 	// GameContentLinks ItemLinks `json:"GameContentLinks"`
