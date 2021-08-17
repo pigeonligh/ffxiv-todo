@@ -3,31 +3,37 @@ package main
 import (
 	"fmt"
 
+	"github.com/pigeonligh/ffxiv-todo/pkg/cache"
 	"github.com/pigeonligh/ffxiv-todo/pkg/loader"
-	"github.com/pigeonligh/ffxiv-todo/pkg/types"
 )
 
 func main() {
-	data, err := loader.New("ffxiv-datamining-cn/Item.csv")
+	itemLoader, err := loader.New("ffxiv-datamining-cn/Item.csv")
 	if err != nil {
 		panic(err)
 	}
+	itemManager := cache.NewItemManager(itemLoader)
 
-	items := []types.Item{}
-
-	size := data.Size()
-	for i := 0; i < size; i++ {
-		item := types.Item{}
-		err = data.Load(i, &item)
-		if err != nil {
-			continue
-		}
-		if len(item.Name) == 0 {
-			continue
-		}
-		items = append(items, item)
-		fmt.Println(item)
+	recipeLoader, err := loader.New("ffxiv-datamining-cn/Recipe.csv")
+	if err != nil {
+		panic(err)
 	}
+	recipeManager := cache.NewRecipeManager(recipeLoader)
 
-	fmt.Println(len(items))
+	item := itemManager.Get("梅干")
+	if item == nil {
+		fmt.Println("Not found")
+	} else {
+		recipes := recipeManager.Get(item.ID)
+		for _, recipe := range recipes {
+			fmt.Printf("%s * %d: \n", item.Name, recipe.Amount)
+			for i, amount := range recipe.IngredientAmount {
+				if amount == 0 {
+					continue
+				}
+				ingre := itemManager.GetByID(recipe.Ingredient[i])
+				fmt.Printf("  %s * %d\n", ingre.Name, amount)
+			}
+		}
+	}
 }
