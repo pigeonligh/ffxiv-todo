@@ -1,6 +1,6 @@
 package types
 
-type Recipe struct {
+type RawRecipe struct {
 	ID int `name:"#"`
 
 	Item   int  `name:"Item{Result}"`
@@ -9,17 +9,34 @@ type Recipe struct {
 
 	Ingredient       []int `name:"Item{Ingredient}"`
 	IngredientAmount []int `name:"Amount{Ingredient}"`
+}
 
-	Name        string `name:"Singular"`
-	Description string `name:"Description"`
-	Icon        int    `name:"Icon"`
-	ItemLevel   int    `name:"Level{Item}"`
-	EquipLevel  int    `name:"Level{Equip}"`
-	Rarity      int    `name:"Rarity"`
-	PriceBuy    int    `name:"Price{Mid}"`
-	PriceSell   int    `name:"Price{Low}"`
-	CanBeHq     bool   `name:"CanBeHq"`
+type Recipe struct {
+	Amount      int
+	Count       int
+	Ingredients map[int]int // map[<item_id>]<item_amount>
+}
 
-	Recipes   []int
-	Gathering []int
+func (u *RawRecipe) EqualTo(v *RawRecipe) bool {
+	if u.Item != v.Item {
+		return false
+	}
+	if u.Amount != v.Amount {
+		return false
+	}
+	if u.CanHq != v.CanHq {
+		return false
+	}
+	for i, amount := range u.IngredientAmount {
+		if u.Ingredient[i] < 20 && v.Ingredient[i] < 20 {
+			continue
+		}
+		if u.Ingredient[i] != v.Ingredient[i] {
+			return false
+		}
+		if amount != v.IngredientAmount[i] {
+			return false
+		}
+	}
+	return true
 }

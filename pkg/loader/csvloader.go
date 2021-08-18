@@ -6,6 +6,8 @@ import (
 	"os"
 	"reflect"
 	"strconv"
+
+	"github.com/pigeonligh/easygo/elog"
 )
 
 type Loader struct {
@@ -16,10 +18,17 @@ type Loader struct {
 	HeaderIndex map[string]int
 }
 
-func New(filename string) (*Loader, error) {
+func New(filename string) (loader *Loader) {
+	defer func() {
+		if r := recover(); r != nil {
+			elog.Errorf("%v", r)
+			loader = nil
+		}
+	}()
 	file, err := os.Open(filename)
 	if err != nil {
-		return nil, err
+		elog.Errorf("%v", err)
+		return nil
 	}
 	defer file.Close()
 
@@ -29,13 +38,19 @@ func New(filename string) (*Loader, error) {
 
 	header, err := reader.Read()
 	if err != nil {
-		return nil, err
+		elog.Errorf("%v", err)
+		return nil
 	}
 	types, err := reader.Read()
 	if err != nil {
-		return nil, err
+		elog.Errorf("%v", err)
+		return nil
 	}
 	data, err := reader.ReadAll()
+	if err != nil {
+		elog.Errorf("%v", err)
+		return nil
+	}
 
 	headerIndex := make(map[string]int)
 	for i, value := range header {
@@ -50,14 +65,20 @@ func New(filename string) (*Loader, error) {
 		Types:       types,
 		Data:        data,
 		HeaderIndex: headerIndex,
-	}, nil
+	}
 }
 
 func (ld *Loader) Size() int {
+	if ld == nil {
+		return 0
+	}
 	return len(ld.Data)
 }
 
 func (ld *Loader) HeaderSize() int {
+	if ld == nil {
+		return 0
+	}
 	return len(ld.Header)
 }
 
@@ -109,6 +130,9 @@ func (ld *Loader) GetBool(row int, name string) bool {
 }
 
 func (ld *Loader) Load(row int, ptr interface{}) (err error) {
+	if ld == nil {
+		return fmt.Errorf("empty loader")
+	}
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("%v", r)

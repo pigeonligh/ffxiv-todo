@@ -6,19 +6,19 @@ import (
 )
 
 type RecipeManager struct {
-	Recipes []*types.Recipe
+	Recipes []*types.RawRecipe
 	Indexes map[int][]int
 	IDIndex map[int]int
 }
 
 func NewRecipeManager(recipeLoader *loader.Loader) *RecipeManager {
-	recipes := make([]*types.Recipe, 0)
+	recipes := make([]*types.RawRecipe, 0)
 	indexes := make(map[int][]int)
 	idIndex := make(map[int]int)
 
 	size := recipeLoader.Size()
 	for i := 0; i < size; i++ {
-		recipe := &types.Recipe{}
+		recipe := &types.RawRecipe{}
 		if err := recipeLoader.Load(i, recipe); err != nil {
 			continue
 		}
@@ -39,10 +39,25 @@ func NewRecipeManager(recipeLoader *loader.Loader) *RecipeManager {
 	}
 }
 
-func (recipes *RecipeManager) Get(item int) []*types.Recipe {
-	result := make([]*types.Recipe, 0)
-	for _, id := range recipes.Indexes[item] {
-		result = append(result, recipes.Recipes[id])
+func (recipes *RecipeManager) Get(item int) *types.Recipe {
+	recipe := &types.Recipe{
+		Amount:      0,
+		Ingredients: make(map[int]int),
 	}
-	return result
+
+	for _, id := range recipes.Indexes[item] {
+		raw := recipes.Recipes[id]
+		recipe.Amount = raw.Amount
+		for i, amount := range raw.IngredientAmount {
+			if amount == 0 {
+				continue
+			}
+			item := raw.Ingredient[i]
+			oriAmount := recipe.Ingredients[item]
+			if amount > oriAmount {
+				recipe.Ingredients[item] = amount
+			}
+		}
+	}
+	return recipe
 }

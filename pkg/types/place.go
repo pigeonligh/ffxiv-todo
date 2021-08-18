@@ -1,13 +1,13 @@
 package types
 
-type Place struct {
+type RawPlace struct {
 	ID   int    `name:"#"`
 	Name string `name:"Name"`
 }
 
-type Territory struct {
+type RawTerritory struct {
 	ID   int    `name:"#"`
-	Name string `name:"Name"`
+	Code string `name:"Name"`
 
 	Region int `name:"PlaceName{Region}"`
 	Zone   int `name:"PlaceName{Zone}"`
@@ -15,7 +15,7 @@ type Territory struct {
 	Map    int `name:"Map"`
 }
 
-type Map struct {
+type RawMap struct {
 	ID        int `name:"#"`
 	X         int `name:"Offset{X}"`
 	Y         int `name:"Offset{Y}"`

@@ -18,7 +18,7 @@ func NewItemManager(itemLoader *loader.Loader) *ItemManager {
 
 	size := itemLoader.Size()
 	for i := 0; i < size; i++ {
-		item := &types.Item{}
+		item := &types.RawItem{}
 		if err := itemLoader.Load(i, item); err != nil {
 			continue
 		}
@@ -27,7 +27,9 @@ func NewItemManager(itemLoader *loader.Loader) *ItemManager {
 		}
 		itemIndex[item.Name] = len(items)
 		idIndex[item.ID] = len(items)
-		items = append(items, item)
+		items = append(items, &types.Item{
+			RawItem: *item,
+		})
 	}
 
 	return &ItemManager{

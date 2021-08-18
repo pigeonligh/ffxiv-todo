@@ -1,11 +1,11 @@
 package types
 
-type GilShop struct {
+type RawGilShop struct {
 	ID   int    `name:"#"`
 	Name string `name:"Name"`
 }
 
-type GilShopItem struct {
+type RawGilShopItem struct {
 	ID   string `name:"#"`
 	Item string `name:"Item"`
 }

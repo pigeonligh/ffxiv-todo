@@ -1,6 +1,6 @@
 package types
 
-type Item struct {
+type RawItem struct {
 	ID          int    `name:"#"`
 	Name        string `name:"Singular"`
 	Description string `name:"Description"`
@@ -11,7 +11,11 @@ type Item struct {
 	PriceBuy    int    `name:"Price{Mid}"`
 	PriceSell   int    `name:"Price{Low}"`
 	CanBeHq     bool   `name:"CanBeHq"`
+}
 
-	Recipes   []int
+type Item struct {
+	RawItem
+
+	Recipe    *Recipe
 	Gathering []int
 }

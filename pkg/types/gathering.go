@@ -1,6 +1,6 @@
 package types
 
-type GatheringPoint struct {
+type RawGatheringPoint struct {
 	ID                 int `name:"#"`
 	Type               int `name:"Type"`
 	GatheringPointBase int `name:"GatheringPointBase"`
@@ -8,7 +8,7 @@ type GatheringPoint struct {
 	Territory          int `name:"TerritoryType"`
 }
 
-type GatheringPointBase struct {
+type RawGatheringPointBase struct {
 	ID             int `name:"#"`
 	GatheringType  int `name:"GatheringType"`
 	GatheringLevel int `name:"GatheringLevel"`
@@ -16,7 +16,7 @@ type GatheringPointBase struct {
 	GatheringItems []int `name:"Item"`
 }
 
-type GatheringItem struct {
+type RawGatheringItem struct {
 	ID             int  `name:"#"`
 	Item           int  `name:"Item"`
 	GatheringLevel int  `name:"GatheringItemLevel"`
