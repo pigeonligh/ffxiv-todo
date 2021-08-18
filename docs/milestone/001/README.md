@@ -1,4 +1,8 @@
-# 制作所需材料计算
+# Milestone
+
+Function：计算配方所需材料
+
+Commit：051a0ad
 
 Code: `cmd/loader/main.go`
 
