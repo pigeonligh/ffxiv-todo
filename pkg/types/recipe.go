@@ -12,9 +12,8 @@ type RawRecipe struct {
 }
 
 type Recipe struct {
-	Amount      int
-	Count       int
-	Ingredients map[int]int // map[<item_id>]<item_amount>
+	Amount      int         `json:"amount"`
+	Ingredients map[int]int `json:"ingredients"` // map[<item_id>]<item_amount>
 }
 
 func (u *RawRecipe) EqualTo(v *RawRecipe) bool {
