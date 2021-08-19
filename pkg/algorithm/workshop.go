@@ -25,6 +25,9 @@ type Workshop struct {
 	workqueue *list.List
 }
 
+type Report struct {
+}
+
 func NewWorkshop(m *cache.Manager) *Workshop {
 	return &Workshop{
 		manager:     m,
@@ -144,4 +147,8 @@ func (w *Workshop) PrintResults() {
 			}
 		}
 	}
+}
+
+func (w *Workshop) Report() *Report {
+	return &Report{}
 }

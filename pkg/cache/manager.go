@@ -18,6 +18,16 @@ type Manager struct {
 	Territory     *TerritoryManager
 }
 
+var instance *Manager
+
+func Init(m *Manager) {
+	instance = m
+}
+
+func GetInstance() *Manager {
+	return instance
+}
+
 func New(rootDir string) *Manager {
 	getloader := func(file string) *loader.Loader {
 		filepath := path.Join(rootDir, file)

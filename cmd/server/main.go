@@ -1,7 +1,28 @@
 package main
 
-import "fmt"
+import (
+	"github.com/pigeonligh/easygo/cli/flags"
+	"github.com/pigeonligh/easygo/elog"
+	"github.com/pigeonligh/ffxiv-todo/pkg/server"
+	"github.com/spf13/cobra"
+)
 
 func main() {
-	fmt.Println("Hello world")
+	config := &server.Config{
+		Debug: false,
+		Port:  80,
+		Data:  "ffxiv-datamining-cn",
+	}
+
+	cmd := &cobra.Command{
+		Use: "server",
+		Run: func(cmd *cobra.Command, args []string) {
+			server.RunServer(config)
+		},
+	}
+	flags.ObjectVar(cmd.Flags(), config, "")
+
+	if err := cmd.Execute(); err != nil {
+		elog.Fatal(err)
+	}
 }
