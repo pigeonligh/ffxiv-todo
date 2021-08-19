@@ -6,6 +6,7 @@ import (
 	"math"
 
 	"github.com/pigeonligh/ffxiv-todo/pkg/cache"
+	"github.com/pigeonligh/ffxiv-todo/pkg/types"
 )
 
 type workItem struct {
@@ -120,7 +121,16 @@ func (w *Workshop) PrintResults() {
 		for _, item := range stages[i] {
 			realItem := w.manager.Item.GetByID(item.id)
 			recipe := realItem.Recipe
-			fmt.Printf("  %s * %d\n", realItem.Name, item.amount)
+			gathering := ""
+			for place := range realItem.Gathering {
+				placeName := w.manager.Place.GetByID(place.Place)
+				gathering += fmt.Sprintf(" %s(%s-%d)",
+					placeName.Name,
+					types.GatheringType[place.Type],
+					place.Level,
+				)
+			}
+			fmt.Printf("  %s * %d   %s\n", realItem.Name, item.amount, gathering)
 			if recipe.Amount > 0 {
 				// worktimes := int(math.Ceil(float64(item.amount) / float64(recipe.Amount)))
 				fmt.Printf("    %d <- ", recipe.Amount)

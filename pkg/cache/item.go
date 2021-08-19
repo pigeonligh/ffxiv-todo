@@ -28,7 +28,8 @@ func NewItemManager(itemLoader *loader.Loader) *ItemManager {
 		itemIndex[item.Name] = len(items)
 		idIndex[item.ID] = len(items)
 		items = append(items, &types.Item{
-			RawItem: *item,
+			RawItem:   *item,
+			Gathering: make(map[types.GatheringPoint]struct{}),
 		})
 	}
 

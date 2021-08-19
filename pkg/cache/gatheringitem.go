@@ -20,7 +20,7 @@ func NewGatheringItemManager(GatheringLoader *loader.Loader) *GatheringItemManag
 		if err := GatheringLoader.Load(i, gath); err != nil {
 			continue
 		}
-		if gath.GatheringLevel == 0 {
+		if gath.Level == 0 {
 			continue
 		}
 		idIndex[gath.ID] = len(gatherings)

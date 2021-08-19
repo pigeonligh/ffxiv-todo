@@ -17,8 +17,6 @@ type RawTerritory struct {
 
 type RawMap struct {
 	ID        int `name:"#"`
-	X         int `name:"Offset{X}"`
-	Y         int `name:"Offset{Y}"`
 	Region    int `name:"PlaceName{Region}"`
 	Place     int `name:"PlaceName"`
 	SubPlace  int `name:"PlaceName{Sub}"`

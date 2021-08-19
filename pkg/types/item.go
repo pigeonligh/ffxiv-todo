@@ -17,5 +17,5 @@ type Item struct {
 	RawItem
 
 	Recipe    *Recipe
-	Gathering []int
+	Gathering map[GatheringPoint]struct{}
 }

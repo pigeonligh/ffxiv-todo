@@ -20,7 +20,7 @@ func NewGatheringBaseManager(GatheringLoader *loader.Loader) *GatheringBaseManag
 		if err := GatheringLoader.Load(i, gathbase); err != nil {
 			continue
 		}
-		if gathbase.GatheringLevel == 0 {
+		if gathbase.Level == 0 {
 			continue
 		}
 		idIndex[gathbase.ID] = len(gatheringbases)
