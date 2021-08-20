@@ -11,3 +11,13 @@ ADD go.* ./
 ADD Makefile ./
 
 RUN make
+
+FROM registry.cn-shanghai.aliyuncs.com/pigeonligh/runtime:alpine-3.14
+
+WORKDIR /app
+
+ADD ffxiv-datamining-cn ./
+
+COPY --from=build /build/_output/bin/server ./
+
+ENTRYPOINT ["/app/server"]
