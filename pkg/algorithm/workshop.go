@@ -25,11 +25,16 @@ type Workshop struct {
 	workqueue *list.List
 }
 
+type Need struct {
+	Item   int `json:"item"`
+	Amount int `json:"amount"`
+}
+
 type Report struct {
 	ItemName      map[int]string        `json:"items"`
 	ItemGathering map[int][]string      `json:"gatherings"`
 	ItemRecipe    map[int]*types.Recipe `json:"recipes"`
-	Stages        map[int][]int         `json:"stages"`
+	Stages        map[int][]Need        `json:"stages"`
 }
 
 func NewWorkshop(m *cache.Manager) *Workshop {
@@ -158,7 +163,7 @@ func (w *Workshop) Report() *Report {
 		ItemName:      make(map[int]string),
 		ItemGathering: make(map[int][]string),
 		ItemRecipe:    make(map[int]*types.Recipe),
-		Stages:        make(map[int][]int),
+		Stages:        make(map[int][]Need),
 	}
 
 	stages := make(map[int][]*workItem)
@@ -172,7 +177,7 @@ func (w *Workshop) Report() *Report {
 	}
 
 	for i := 1; i <= maxStage; i++ {
-		stageItems := make([]int, 0)
+		stageItems := make([]Need, 0)
 		for _, item := range stages[i] {
 			realItem := w.manager.Item.GetByID(item.id)
 			recipe := realItem.Recipe
@@ -183,9 +188,16 @@ func (w *Workshop) Report() *Report {
 			}
 
 			report.ItemName[item.id] = realItem.Name
-			report.ItemRecipe[item.id] = recipe
-			report.ItemGathering[item.id] = gathering
-			stageItems = append(stageItems, item.id)
+			if recipe.Amount > 0 {
+				report.ItemRecipe[item.id] = recipe
+			}
+			if len(gathering) > 0 {
+				report.ItemGathering[item.id] = gathering
+			}
+			stageItems = append(stageItems, Need{
+				Item:   item.id,
+				Amount: item.amount,
+			})
 		}
 		report.Stages[i] = stageItems
 	}
