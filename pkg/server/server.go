@@ -17,12 +17,16 @@ type Config struct {
 func RunServer(config *Config) error {
 	if config.Debug {
 		gin.SetMode(gin.DebugMode)
+		elog.Debug()
 	} else {
 		gin.SetMode(gin.ReleaseMode)
+		elog.Default()
 	}
+
 	addr := fmt.Sprintf(":%d", config.Port)
 	manager := cache.New(config.Data)
 	cache.Init(manager)
+	elog.Info("Inited")
 
 	router := gin.Default()
 

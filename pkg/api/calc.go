@@ -26,15 +26,17 @@ func Calculate(c *gin.Context) {
 		item := m.Item.Get(name)
 		if item == nil {
 			skips[name] = struct{}{}
+		} else {
+			w.AddProduct(item.ID, amount)
 		}
-		w.AddProduct(item.ID, amount)
 	}
 	for name, amount := range request.Inventories {
 		item := m.Item.Get(name)
 		if item == nil {
 			skips[name] = struct{}{}
+		} else {
+			w.AddInventory(item.ID, amount)
 		}
-		w.AddInventory(item.ID, amount)
 	}
 
 	if err := w.Calculate(); err != nil {

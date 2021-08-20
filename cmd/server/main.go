@@ -17,10 +17,10 @@ func main() {
 	cmd := &cobra.Command{
 		Use: "server",
 		Run: func(cmd *cobra.Command, args []string) {
-			server.RunServer(config)
+			_ = server.RunServer(config)
 		},
 	}
-	flags.ObjectVar(cmd.Flags(), config, "")
+	_ = flags.ObjectVar(cmd.Flags(), config, "")
 
 	if err := cmd.Execute(); err != nil {
 		elog.Fatal(err)

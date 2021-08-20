@@ -185,6 +185,7 @@ func (w *Workshop) Report() *Report {
 			report.ItemName[item.id] = realItem.Name
 			report.ItemRecipe[item.id] = recipe
 			report.ItemGathering[item.id] = gathering
+			stageItems = append(stageItems, item.id)
 		}
 		report.Stages[i] = stageItems
 	}
