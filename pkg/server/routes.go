@@ -6,5 +6,5 @@ import (
 )
 
 func Install(r gin.IRouter) {
-	r.GET("/calc", api.Calculate)
+	r.POST("/calc", api.Calculate)
 }
