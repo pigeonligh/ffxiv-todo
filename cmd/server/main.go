@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/pigeonligh/easygo/cli/flags"
-	"github.com/pigeonligh/easygo/elog"
 	"github.com/pigeonligh/ffxiv-todo/pkg/server"
 	"github.com/spf13/cobra"
+	"gopkg.pigeonligh.com/easygo/cli/flags"
+	"gopkg.pigeonligh.com/easygo/elog"
 )
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 			_ = server.RunServer(config)
 		},
 	}
-	_ = flags.ObjectVar(cmd.Flags(), config, "")
+	_ = flags.ObjectVar(cmd.Flags(), config, nil)
 
 	if err := cmd.Execute(); err != nil {
 		elog.Fatal(err)

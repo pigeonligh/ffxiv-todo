@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/pigeonligh/easygo/elog"
+	"gopkg.pigeonligh.com/easygo/elog"
 )
 
 type Loader struct {

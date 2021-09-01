@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	"github.com/pigeonligh/easygo/elog"
 	"github.com/pigeonligh/ffxiv-todo/pkg/cache"
+	"gopkg.pigeonligh.com/easygo/elog"
 )
 
 type Config struct {

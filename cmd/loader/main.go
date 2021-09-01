@@ -6,9 +6,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/pigeonligh/easygo/elog"
 	"github.com/pigeonligh/ffxiv-todo/pkg/algorithm"
 	"github.com/pigeonligh/ffxiv-todo/pkg/cache"
+	"gopkg.pigeonligh.com/easygo/elog"
 )
 
 func main() {
